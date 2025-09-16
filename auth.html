@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication - MindEase</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Logo Section -->
+            <div class="auth-header">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <img src="Logo.png" alt="MindEase Logo">
+                    </div>
+                    <h1 class="logo-text">MindEase</h1>
+                </div>
+                <p class="auth-subtitle">Your personal mindfulness and productivity companion</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="auth-tabs">
+                <button class="tab-button active" id="loginTab" onclick="switchTab('login')">
+                    <span class="tab-icon">🔑</span>
+                    <span class="tab-text">Sign In</span>
+                </button>
+                <button class="tab-button" id="signupTab" onclick="switchTab('signup')">
+                    <span class="tab-icon">📝</span>
+                    <span class="tab-text">Sign Up</span>
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <div class="auth-form" id="loginForm">
+                <h2 class="form-title">Welcome Back</h2>
+                <p class="form-description">Sign in to continue your mindfulness journey</p>
+
+                <form class="manual-auth-form" id="loginFormElement">
+                    <div class="form-group">
+                        <label for="emailOrPhone" class="form-label">Email or Phone Number</label>
+                        <input type="text" 
+                               id="emailOrPhone" 
+                               name="emailOrPhone" 
+                               class="form-input" 
+                               placeholder="Enter your email or phone number"
+                               required>
+                        <div class="input-icon">
+                            <svg width="20" height="20" class="mail-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" 
+                               id="password" 
+                               name="password" 
+                               class="form-input" 
+                               placeholder="Enter your password"
+                               required>
+                        <div class="input-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <circle cx="12" cy="16" r="1"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                        </div>
+                        <button type="button" class="password-toggle" id="passwordToggle">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="rememberMe" name="rememberMe">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="resetPasswordLink">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="auth-button">
+                        <span class="button-text">Sign In</span>
+                        <div class="button-loader" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div class="auth-form" id="signupForm" style="display: none;">
+                <h2 class="form-title">Create Your Account</h2>
+                <p class="form-description">Fill in your details to get started</p>
+
+                <form class="manual-auth-form" id="signupFormElement">
+                    <!-- Name Field -->
+                    <div class="form-group">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <input type="text" 
+                               id="fullName" 
+                               name="fullName" 
+                               class="form-input" 
+                               placeholder="Enter your full name"
+                               required>
+                        <div class="input-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" 
+                               id="email" 
+                               name="email" 
+                               class="form-input" 
+                               placeholder="Enter your email address"
+                               required>
+                        <div class="input-icon">
+                            <svg width="20" height="20" class="mail-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Number Field -->
+                    <div class="form-group">
+                        <label for="mobile" class="form-label">Mobile Number</label>
+                        <input type="tel" 
+                               id="mobile" 
+                               name="mobile" 
+                               class="form-input" 
+                               placeholder="Enter your mobile number"
+                               required
+                               maxlength="10">
+                        <div class="input-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Gender and Age Row -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select id="gender" name="gender" class="form-input" required>
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="prefer-not-to-say">Prefer not to say</option>
+                            </select>
+                            <div class="input-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="age" class="form-label">Age</label>
+                            <input type="number" 
+                                   id="age" 
+                                   name="age" 
+                                   class="form-input" 
+                                   placeholder="Age"
+                                   min="13"
+                                   max="120"
+                                   required>
+                            <div class="input-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12,6 12,12 16,14"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label for="signupPassword" class="form-label">Create Password</label>
+                        <input type="password" 
+                               id="signupPassword" 
+                               name="signupPassword" 
+                               class="form-input" 
+                               placeholder="Create a strong password"
+                               pattern="(?=.*\d)(?=.*[a-z]).{8,}"
+                               required
+                               >
+                        <div class="input-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <circle cx="12" cy="16" r="1"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                        </div>
+                        <button type="button" class="password-toggle" id="signupPasswordToggle">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Verify Password Field -->
+                    <div class="form-group">
+                        <label for="verifyPassword" class="form-label">Verify Password</label>
+                        <input type="password" 
+                               id="verifyPassword" 
+                               name="verifyPassword" 
+                               class="form-input" 
+                               placeholder="Confirm your password"
+                               required>
+                        <div class="input-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <circle cx="12" cy="16" r="1"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                        </div>
+                        <button type="button" class="password-toggle" id="verifyPasswordToggle">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="form-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="termsAndConditions" name="termsAndConditions" required>
+                            <span class="checkmark"></span>
+                            I declare that the above data are correct and filled by me.</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="auth-button">
+                        <span class="button-text">Create Account</span>
+                        <div class="button-loader" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Features Section -->
+            <div class="auth-features">
+                <div class="feature-item">
+                    <div class="feature-icon">🧘</div>
+                    <h3>Guided Meditations</h3>
+                    <p>Find inner peace with our curated meditation sessions</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⏰</div>
+                    <h3>Pomodoro Timer</h3>
+                    <p>Boost productivity with focused work sessions</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <h3>Progress Analytics</h3>
+                    <p>Track your mindfulness journey and growth</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon">✅</div>
+            <h3 id="successTitle">Success!</h3>
+            <p id="successMessage">Operation completed successfully.</p>
+            <div class="modal-loader">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="modal" id="errorModal">
+        <div class="modal-content">
+            <div class="modal-icon">❌</div>
+            <h3>Error</h3>
+            <p id="errorMessage">Please try again.</p>
+            <button class="modal-button" onclick="closeErrorModal()">Try Again</button>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>
+
