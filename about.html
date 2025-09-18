@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - MindEase</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .about-hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .about-hero h1 {
+            font-size: 3rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        
+        .about-hero p {
+            font-size: 1.2rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .team-section {
+            margin-bottom: 4rem;
+        }
+        
+        .team-section h2 {
+            font-size: 2.5rem;
+            color: #1f2937;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .team-name {
+            background: linear-gradient(135deg, #10B981, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .team-members {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+        
+        .member-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-width: 280px;
+            flex: 1;
+            max-width: 320px;
+        }
+        
+        .member-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .member-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10B981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .member-name {
+            font-size: 1.25rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .member-role {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+        
+        .contact-section {
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+        }
+        
+        .contact-section h2 {
+            font-size: 2.5rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-section p {
+            font-size: 1.1rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+        
+        .contact-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .contact-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #1f2937;
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-icon {
+            background: #25D366;
+            color: white;
+        }
+        
+        .phone-icon {
+            background: #3B82F6;
+            color: white;
+        }
+        
+        .email-icon {
+            background: #EA4335;
+            color: white;
+        }
+        
+        .contact-icon:hover .whatsapp-icon {
+            background: #128C7E;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+        }
+        
+        .contact-icon:hover .phone-icon {
+            background: #2563EB;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .contact-icon:hover .email-icon {
+            background: #D33B2C;
+            box-shadow: 0 8px 25px rgba(234, 67, 53, 0.3);
+        }
+        
+        .contact-label {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        /* Contact Popup Styles */
+        .contact-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .contact-popup-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .contact-popup h3 {
+            color: #1f2937;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .contact-display {
+            background: #f3f4f6;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: #1f2937;
+            word-break: break-all;
+        }
+        
+        .copy-button {
+            background: #10B981;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: background 0.3s ease;
+        }
+        
+        .copy-button:hover {
+            background: #059669;
+        }
+        
+        .close-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: background 0.3s ease;
+        }
+        
+        .close-button:hover {
+            background: #4b5563;
+        }
+        
+        .copy-success {
+            color: #10B981;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .team-section h2,
+            .contact-section h2 {
+                font-size: 2rem;
+            }
+            
+            .team-members {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .member-card {
+                max-width: 300px;
+                width: 100%;
+            }
+            
+            .contact-icons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+    <header class="navbar">
+        <div class="navbar-container">
+            <!-- Logo Section -->
+            <div class="logo-section" style="order: 0; margin-right: 2rem;">
+                <div class="logo-icon">
+                    <img src="Logo.png" alt="logo-icon">
+                </div>
+                <span class="logo-text">MindEase</span>
+            </div>
+            
+            <!-- Navigation Links -->
+            <nav class="nav-links" style="order: 1;">
+                <a href="dashboard.html" class="nav-link" id="dashboardNav" style="display: none;">Dashboard</a>
+                <a href="focus.html" class="nav-link" id="focusNav" style="display: none;">Focus</a>
+                <a href="about.html" class="nav-link">About Us</a>
+            </nav>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons" style="order: 2;">
+                <div id="timerIndicator" class="timer-indicator" style="display: none;"></div>
+                <button class="btn btn-register" id="registerBtn" style="display: none;">Register</button>
+                <button class="btn btn-login" id="loginBtn" style="display: none;">Login</button>
+                <div class="profile-pic" id="profilePic" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 31C7.729 31 1 24.271 1 16S7.729 1 16 1s15 6.729 15 15-6.729 15-15 15zm0-28C8.832 3 3 8.832 3 16s5.832 13 13 13 13-5.832 13-13S23.168 3 16 3z"/><circle cx="16" cy="15.133" r="4.267"/><path d="M16 30c2.401 0 4.66-.606 6.635-1.671-.425-3.229-3.18-5.82-6.635-5.82s-6.21 2.591-6.635 5.82A13.935 13.935 0 0 0 16 30z"/></svg>
+                </div>
+                <div class="profile-popout" id="profilePopout" style="display: none;">
+                    <div class="profile-details">
+                        <h4>User Details</h4>
+                        <p><strong>Name:</strong> <span id="userName"></span></p>
+                        <p><strong>Email ID:</strong> <span id="userEmail"></span></p>
+                        <p><strong>Mobile No.:</strong> <span id="userPhone"></span></p>
+                        <div class="profile-actions">
+                            <a href="#" id="resetPasswordLink">Reset Password</a>
+                            <button class="btn btn-logout" id="logoutBtn">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="about-container">
+            <!-- Hero Section -->
+            <section class="about-hero">
+                <h1>About MindEase</h1>
+                <p>Your digital well-being companion designed to help you focus deeply, rest intentionally, and feel better every day.</p>
+            </section>
+
+            <!-- Team Section -->
+            <section class="team-section">
+                <h2>Meet Our Team</h2>
+                <div class="team-name">INFINITE LOOPERS</div>
+                
+                <div class="team-members">
+                    <div class="member-card">
+                        <div class="member-avatar">PA</div>
+                        <div class="member-name">Parth Arora</div>
+                        <div class="member-role">Team Leader</div>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-avatar">AG</div>
+                        <div class="member-name">Aryan Garg</div>
+                        <div class="member-role">Team Member</div>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-avatar">VC</div>
+                        <div class="member-name">Vivek Choudhary</div>
+                        <div class="member-role">Team Member</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section class="contact-section">
+                <h2>Contact Us</h2>
+                <p>Have questions or feedback? We'd love to hear from you!</p>
+                
+                <div class="contact-icons">
+                    <a href="https://wa.me/8459300702" class="contact-icon" target="_blank" rel="noopener noreferrer">
+                        <div class="icon-circle whatsapp-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                            </svg>
+                        </div>
+                        <span class="contact-label">WhatsApp</span>
+                    </a>
+                    
+                    <a href="#" class="contact-icon" onclick="showPhonePopup()">
+                        <div class="icon-circle phone-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                        </div>
+                        <span class="contact-label">Phone</span>
+                    </a>
+                    
+                    <a href="#" class="contact-icon" onclick="showEmailPopup()">
+                        <div class="icon-circle email-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                        </div>
+                        <span class="contact-label">Email</span>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" id="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="footer-brand-heading">MindEase</span>
+                <p>Your companion for focus, rest, and well‑being.</p>
+            </div>
+        </div>
+    </footer>
+    </div>
+
+    <!-- Phone Popup -->
+    <div class="contact-popup" id="phonePopup">
+        <div class="contact-popup-content">
+            <h3>Contact Phone</h3>
+            <div class="contact-display" id="phoneDisplay">+91 8459300702</div>
+            <button class="copy-button" onclick="copyPhone()">Copy Phone</button>
+            <button class="close-button" onclick="closePhonePopup()">Close</button>
+            <div class="copy-success" id="phoneCopySuccess">Phone number copied to clipboard!</div>
+        </div>
+    </div>
+
+    <!-- Email Popup -->
+    <div class="contact-popup" id="emailPopup">
+        <div class="contact-popup-content">
+            <h3>Contact Email</h3>
+            <div class="contact-display" id="emailDisplay">Parthom0716+MindEase@gmail.com</div>
+            <button class="copy-button" onclick="copyEmail()">Copy Email</button>
+            <button class="close-button" onclick="closeEmailPopup()">Close</button>
+            <div class="copy-success" id="emailCopySuccess">Email copied to clipboard!</div>
+        </div>
+    </div>
+
+    <script>
+        // Phone popup functions
+        function showPhonePopup() {
+            document.getElementById('phonePopup').style.display = 'flex';
+        }
+        
+        function closePhonePopup() {
+            document.getElementById('phonePopup').style.display = 'none';
+            document.getElementById('phoneCopySuccess').style.display = 'none';
+        }
+        
+        function copyPhone() {
+            const phoneText = document.getElementById('phoneDisplay').textContent;
+            
+            // Try to use the modern clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(phoneText).then(function() {
+                    showPhoneCopySuccess();
+                }).catch(function() {
+                    fallbackCopyTextToClipboard(phoneText, 'phoneCopySuccess');
+                });
+            } else {
+                fallbackCopyTextToClipboard(phoneText, 'phoneCopySuccess');
+            }
+        }
+        
+        function showPhoneCopySuccess() {
+            const successMsg = document.getElementById('phoneCopySuccess');
+            successMsg.style.display = 'block';
+            setTimeout(function() {
+                successMsg.style.display = 'none';
+            }, 2000);
+        }
+        
+        // Email popup functions
+        function showEmailPopup() {
+            document.getElementById('emailPopup').style.display = 'flex';
+        }
+        
+        function closeEmailPopup() {
+            document.getElementById('emailPopup').style.display = 'none';
+            document.getElementById('emailCopySuccess').style.display = 'none';
+        }
+        
+        function copyEmail() {
+            const emailText = document.getElementById('emailDisplay').textContent;
+            
+            // Try to use the modern clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(emailText).then(function() {
+                    showEmailCopySuccess();
+                }).catch(function() {
+                    fallbackCopyTextToClipboard(emailText, 'emailCopySuccess');
+                });
+            } else {
+                fallbackCopyTextToClipboard(emailText, 'emailCopySuccess');
+            }
+        }
+        
+        function showEmailCopySuccess() {
+            const successMsg = document.getElementById('emailCopySuccess');
+            successMsg.style.display = 'block';
+            setTimeout(function() {
+                successMsg.style.display = 'none';
+            }, 2000);
+        }
+        
+        // Common copy function
+        function fallbackCopyTextToClipboard(text, successElementId) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            textArea.style.opacity = "0";
+            
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    const successMsg = document.getElementById(successElementId);
+                    successMsg.style.display = 'block';
+                    setTimeout(function() {
+                        successMsg.style.display = 'none';
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error('Fallback: Could not copy text: ', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        // Close popups when clicking outside
+        document.getElementById('phonePopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePhonePopup();
+            }
+        });
+        
+        document.getElementById('emailPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEmailPopup();
+            }
+        });
+    </script>
+    <script src="background-timer.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -197,6 +197,15 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.closePath();
             ctx.fill();
             bars.push({ x, y, w: barW, h, value: v, label: labels[i], date: dates[i] });
+            
+            // Display time value above each bar
+            ctx.fillStyle = labelColor;
+            ctx.font = '11px sans-serif';
+            ctx.textAlign = 'center';
+            const valueText = `${v}m`;
+            const textY = Math.max(y - 8, padding + 12); // Ensure text doesn't go above chart area
+            ctx.fillText(valueText, x + barW / 2, textY);
+            ctx.fillStyle = barGradient; // Reset to bar color for next iteration
         });
 
         // Labels
@@ -213,48 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.textAlign = 'right';
         ctx.fillText('(minutes)', cssWidth - 8, padding - 10);
 
-        // Tooltip interactions
-        if (tooltip) {
-            function showTooltip(e) {
-                const rect = canvas.getBoundingClientRect();
-                const mx = e.clientX - rect.left; // CSS pixels
-                const my = e.clientY - rect.top;
-                // Find hovered bar
-                const bx = mx - padding;
-                let hit = null;
-                bars.forEach(b => {
-                    const withinX = mx >= (b.x) && mx <= (b.x + b.w);
-                    const withinY = my >= (b.y) && my <= (b.y + b.h);
-                    if (withinX && withinY) hit = b;
-                });
-                if (hit) {
-                    tooltip.style.display = 'block';
-                    tooltip.textContent = `${hit.label}: ${hit.value} min`;
-                    tooltip.style.left = `${e.clientX}px`;
-                    tooltip.style.top = `${e.clientY}px`;
-                    // Highlight bar outline
-                    ctx.save();
-                    ctx.strokeStyle = '#06B6D4';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    const r = Math.min(8, hit.w / 2, hit.h);
-                    ctx.moveTo(hit.x, hit.y + hit.h);
-                    ctx.lineTo(hit.x, hit.y + r);
-                    ctx.quadraticCurveTo(hit.x, hit.y, hit.x + r, hit.y);
-                    ctx.lineTo(hit.x + hit.w - r, hit.y);
-                    ctx.quadraticCurveTo(hit.x + hit.w, hit.y, hit.x + hit.w, hit.y + r);
-                    ctx.lineTo(hit.x + hit.w, hit.y + hit.h);
-                    ctx.closePath();
-                    ctx.stroke();
-                    ctx.restore();
-                } else {
-                    tooltip.style.display = 'none';
-                }
-            }
-            function leaveTooltip() { tooltip.style.display = 'none'; }
-            canvas.onmousemove = showTooltip;
-            canvas.onmouseleave = leaveTooltip;
-        }
+        // Remove tooltip functionality - values are now always displayed above bars
     }
 
     renderSevenDayChart();

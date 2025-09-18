@@ -92,6 +92,9 @@ document.addEventListener('DOMContentLoaded', function() {
             clearInterval(timerId);
             updatePlayPauseButton();
             
+            // Show alert and play alarm sound
+            showTimerAlert();
+            
             // Switch between study and break modes
             if (isStudyMode) {
                 isStudyMode = false;
@@ -121,20 +124,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function startPause() {
-        if (running) {
-            running = false;
-            clearInterval(timerId);
+        if (window.backgroundTimer) {
+            if (running) {
+                window.backgroundTimer.pauseTimer();
+            } else {
+                window.backgroundTimer.resumeTimer();
+            }
         } else {
-            running = true;
-            timerId = setInterval(tick, 1000);
+            if (running) {
+                running = false;
+                clearInterval(timerId);
+            } else {
+                running = true;
+                timerId = setInterval(tick, 1000);
+            }
         }
         updatePlayPauseButton();
     }
 
     function reset() {
-        running = false;
-        clearInterval(timerId);
-        remaining = total;
+        if (window.backgroundTimer) {
+            window.backgroundTimer.resetTimer();
+        } else {
+            running = false;
+            clearInterval(timerId);
+            remaining = total;
+        }
         updatePlayPauseButton();
         render();
     }
@@ -156,6 +171,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 remaining = studyTime;
                 reset();
             }
+            
+            // Update background timer if it exists
+            if (window.backgroundTimer) {
+                window.backgroundTimer.studyTime = studyTime;
+                window.backgroundTimer.saveTimerState();
+            }
         }
     }
 
@@ -175,6 +196,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 total = breakTime;
                 remaining = breakTime;
                 reset();
+            }
+            
+            // Update background timer if it exists
+            if (window.backgroundTimer) {
+                window.backgroundTimer.breakTime = breakTime;
+                window.backgroundTimer.saveTimerState();
             }
         }
     }
@@ -209,9 +236,127 @@ document.addEventListener('DOMContentLoaded', function() {
     if (playPauseBtn) playPauseBtn.addEventListener('click', startPause);
     if (resetBtn) resetBtn.addEventListener('click', reset);
 
+    // Sync with background timer
+    function syncWithBackgroundTimer() {
+        if (window.backgroundTimer) {
+            const state = window.backgroundTimer.getTimerState();
+            studyTime = state.studyTime;
+            breakTime = state.breakTime;
+            remaining = state.remainingTime;
+            total = state.totalTime;
+            isStudyMode = state.isStudyMode;
+            running = state.isRunning;
+            
+            // Update UI
+            updatePlayPauseButton();
+            render();
+            
+            // Update progress circle color
+            if (progressCircle) {
+                progressCircle.style.stroke = isStudyMode ? '#10B981' : '#06B6D4';
+            }
+        }
+    }
+
+    // Sync every second
+    setInterval(syncWithBackgroundTimer, 1000);
+
+    // Timer alert functionality
+    let alarmAudio = null;
+    let alertInterval = null;
+
+    function showTimerAlert() {
+        const modeText = isStudyMode ? 'Study' : 'Break';
+        const message = `${modeText} time completed! Time for a ${isStudyMode ? 'break' : 'study'} session.`;
+        
+        // Play alarm sound
+        playAlarmSound();
+        
+        // Show alert with stop button
+        const userResponse = confirm(`${message}\n\nClick OK to stop the alarm and continue.`);
+        
+        if (userResponse) {
+            stopAlarmSound();
+        }
+    }
+
+    function playAlarmSound() {
+        try {
+            // Create audio element if it doesn't exist
+            if (!alarmAudio) {
+                alarmAudio = new Audio('alarm.mp3');
+                alarmAudio.loop = true; 
+                alarmAudio.volume = 1.0;
+            }
+            
+            // Play the alarm sound
+            alarmAudio.play().catch(error => {
+                console.log('Could not play alarm sound:', error);
+                // Fallback: use browser's built-in beep if audio file fails
+                playFallbackBeep();
+            });
+        } catch (error) {
+            console.log('Error playing alarm sound:', error);
+            playFallbackBeep();
+        }
+    }
+
+    function stopAlarmSound() {
+        if (alarmAudio) {
+            alarmAudio.pause();
+            alarmAudio.currentTime = 0; // Reset to beginning
+        }
+        if (alertInterval) {
+            clearInterval(alertInterval);
+            alertInterval = null;
+        }
+    }
+
+    function playFallbackBeep() {
+        // Fallback beep sound using Web Audio API
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.type = 'square';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+            
+            // Repeat the beep every 2 seconds
+            alertInterval = setInterval(() => {
+                const newOscillator = audioContext.createOscillator();
+                const newGainNode = audioContext.createGain();
+                
+                newOscillator.connect(newGainNode);
+                newGainNode.connect(audioContext.destination);
+                
+                newOscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                newOscillator.type = 'square';
+                
+                newGainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                newGainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                newOscillator.start(audioContext.currentTime);
+                newOscillator.stop(audioContext.currentTime + 0.5);
+            }, 2000);
+        } catch (error) {
+            console.log('Fallback beep also failed:', error);
+        }
+    }
+
     // Initialize
     updatePlayPauseButton();
     render();
+    syncWithBackgroundTimer();
 });
 
 

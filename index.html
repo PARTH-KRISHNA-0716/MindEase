@@ -23,10 +23,12 @@
             <nav class="nav-links" style="order: 1;">
                 <a href="dashboard.html" class="nav-link" id="dashboardNav" style="display: none;">Dashboard</a>
                 <a href="focus.html" class="nav-link" id="focusNav" style="display: none;">Focus</a>
+                <a href="about.html" class="nav-link">About</a>
             </nav>
             
             <!-- Action Buttons -->
             <div class="action-buttons" style="order: 2;">
+                <div id="timerIndicator" class="timer-indicator" style="display: none;"></div>
                 <button class="btn btn-register" id="registerBtn" style="display: none;">Register</button>
                 <button class="btn btn-login" id="loginBtn" style="display: none;">Login</button>
                 <div class="profile-pic" id="profilePic" style="display: none;">
@@ -137,6 +139,7 @@
             </footer>
         </div>
             
+    <script src="background-timer.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
