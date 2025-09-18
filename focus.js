@@ -231,6 +231,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     customStudyInput.addEventListener('input', updateStudyTime);
     customBreakInput.addEventListener('input', updateBreakTime);
+    
+    // Add Enter key support for custom timer inputs
+    customStudyInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            updateStudyTime();
+            // Hide the input after Enter is pressed
+            customStudyInput.style.display = 'none';
+            // Select the custom radio button to show it's active
+            const customRadio = document.querySelector('input[name="studyTime"][value="custom"]');
+            if (customRadio) customRadio.checked = true;
+        }
+    });
+    
+    customBreakInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            updateBreakTime();
+            // Hide the input after Enter is pressed
+            customBreakInput.style.display = 'none';
+            // Select the custom radio button to show it's active
+            const customRadio = document.querySelector('input[name="breakTime"][value="custom"]');
+            if (customRadio) customRadio.checked = true;
+        }
+    });
 
     // Event listeners for control buttons
     if (playPauseBtn) playPauseBtn.addEventListener('click', startPause);

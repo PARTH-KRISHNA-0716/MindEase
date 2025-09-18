@@ -22,8 +22,9 @@ class BackgroundTimer {
         this.loadTimerState();
         
         // Start background timer if it was running
-        if (this.isRunning) {
+        if (this.isRunning && this.remainingTime > 0) {
             this.startBackgroundTimer();
+            console.log('Background timer started on page load:', this.remainingTime, 'seconds remaining');
         }
         
         // Update timer every second
@@ -122,6 +123,7 @@ class BackgroundTimer {
             this.startBackgroundTimer();
             this.saveTimerState();
             this.updateNavbarIndicator();
+            console.log('Timer resumed:', this.remainingTime, 'seconds remaining');
         }
     }
 
