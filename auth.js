@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
         signupPassword: {
             required: true,
             minLength: 8,
-            pattern: /^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#._-])[a-z\d@$!%*?&#._-]/,
+            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#._-])[a-zA-Z\d@$!%*?&#._-]/,
             message: 'Password must be at least 8 characters with uppercase, lowercase, number, and special character'
         },
         verifyPassword: {
