@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - MindEase</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="page-shell">
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo-section" style="order: 0; margin-right: 2rem;">
+                <div class="logo-icon">
+                    <img src="Logo.png" alt="logo-icon">
+                </div>
+                <span class="logo-text">MindEase</span>
+            </div>
+            <nav class="nav-links" style="order: 1;">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="focus.html" class="nav-link">Focus</a>
+            </nav>
+            <div class="action-buttons" style="order: 2;">
+                <div class="profile-pic" id="profilePic" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 31C7.729 31 1 24.271 1 16S7.729 1 16 1s15 6.729 15 15-6.729 15-15 15zm0-28C8.832 3 3 8.832 3 16s5.832 13 13 13 13-5.832 13-13S23.168 3 16 3z"/><circle cx="16" cy="15.133" r="4.267"/><path d="M16 30c2.401 0 4.66-.606 6.635-1.671-.425-3.229-3.18-5.82-6.635-5.82s-6.21 2.591-6.635 5.82A13.935 13.935 0 0 0 16 30z"/></svg>
+                </div>
+                <div class="profile-popout" id="profilePopout" style="display: none;">
+                    <div class="profile-details">
+                        <h4>User Details</h4>
+                        <p><strong>Name:</strong> <span id="userName"></span></p>
+                        <p><strong>Email ID:</strong> <span id="userEmail"></span></p>
+                        <p><strong>Mobile No.:</strong> <span id="userPhone"></span></p>
+                        <div class="profile-actions">
+                            <a href="#" id="dashboardResetPasswordLink">Reset Password</a>
+                            <button class="btn btn-logout" id="logoutBtn">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <h1 class="dashboard-title">Welcome back, <span id="welcomeUserName"></span>!</h1>
+        <h2 class="dashboard-subtitle">What are we doing today?</h2>
+
+        <section class="grid">
+            <div class="card card-graph">
+                <h2>Time spent in the last 7 days</h2>
+                <canvas id="timeChart" width="900" height="280"></canvas>
+                <div id="chartTooltip" class="chart-tooltip"></div>
+            </div>
+
+            <div class="card card-todos">
+                <h2>To‑Do List</h2>
+                <div class="todo-inputs">
+                    <input id="todoText" type="text" placeholder="Add a task...">
+                    <button id="addTodo" class="btn btn-login">Add</button>
+                </div>
+                <ul id="todoList" class="todo-list"></ul>
+            </div>
+
+            <div class="card card-calendar">
+                <h2>Schedule</h2>
+                <div class="calendar-controls">
+                    <button id="prevMonth" class="btn btn-register">Prev</button>
+                    <div id="monthLabel"></div>
+                    <button id="nextMonth" class="btn btn-register">Next</button>
+                </div>
+                <div class="calendar-weekdays">
+                    <div class="calendar-weekday">Sun</div>
+                    <div class="calendar-weekday">Mon</div>
+                    <div class="calendar-weekday">Tue</div>
+                    <div class="calendar-weekday">Wed</div>
+                    <div class="calendar-weekday">Thu</div>
+                    <div class="calendar-weekday">Fri</div>
+                    <div class="calendar-weekday">Sat</div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+                <div class="schedule-editor">
+                    <div>
+                        <strong id="selectedDateLabel">Select a date</strong>
+                    </div>
+                    <textarea id="scheduleText" rows="3" placeholder="Add notes or schedule for this day..."></textarea>
+                    <div style="display:flex; gap: 0.5rem;">
+                        <button id="todayBtn" class="btn btn-register" type="button">Today</button>
+                        <button id="saveSchedule" class="btn btn-login" type="button">Save</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer" id="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="footer-brand-heading">MindEase</span>
+                <p>Your companion for focus, rest, and well‑being.</p>
+            </div>
+        </div>
+    </footer>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,184 @@
+.dashboard-main {
+    max-width: 1200px;
+    margin: auto auto;
+    padding: 1.5rem 2rem 2.5rem;
+}
+
+.dashboard-title {
+    color: #0b1220;
+    margin: 1rem 0 0.5rem 0;
+}
+
+.dashboard-subtitle {
+    margin: 0;
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+    
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-auto-rows: minmax(200px, auto);
+    gap: 1rem;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 1rem;
+}
+
+.card-graph {
+    grid-column: 1 / 3;
+}
+
+.card-graph canvas {
+    width: 100%;
+    display: block;
+}
+
+.todo-inputs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.todo-inputs input {
+    flex: 1;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+}
+
+.todo-list {
+    list-style: none;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.todo-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.todo-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.todo-item.completed .todo-text {
+    text-decoration: line-through;
+    color: #9ca3af;
+}
+
+.calendar-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.calendar-weekday {
+    text-align: center;
+    font-weight: 600;
+    color: #475569;
+}
+
+.calendar-cell {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    min-height: 64px;
+    padding: 0.5rem;
+    background: #f9fafb;
+    cursor: pointer;
+}
+
+.calendar-cell.selected {
+    outline: 2px solid #06B6D4;
+    background: #ecfeff;
+}
+
+.calendar-cell.today {
+    border-color: #06B6D4;
+    box-shadow: inset 0 0 0 2px #06B6D4;
+    background: #f0f9ff;
+}
+
+.calendar-cell .date-number {
+    font-weight: 600;
+    color: #111827;
+}
+
+.calendar-cell .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #10B981;
+    display: inline-block;
+    margin-top: 6px;
+}
+
+.schedule-editor {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.schedule-editor textarea {
+    grid-column: 1 / 3;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+}
+
+@media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+    .card-graph { grid-column: auto; }
+}
+
+/* Chart tooltip */
+.chart-tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: #111827;
+    color: #ffffff;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    transform: translate(-50%, -120%);
+    white-space: nowrap;
+    z-index: 1002;
+    display: none;
+}
+
+
+
+
+

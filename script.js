@@ -20,20 +20,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Navigation link interactions
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Remove active class from all links
-            navLinks.forEach(l => l.classList.remove('active'));
-            
-            // Add active class to clicked link
-            this.classList.add('active');
-            
-            // Simulate navigation (you can replace this with actual routing)
-            const pageName = this.textContent.toLowerCase();
-            console.log(`Navigating to: ${pageName}`);
-            
-            // Update page content based on navigation
-            updatePageContent(pageName);
+            const href = this.getAttribute('href') || '';
+            const isInPage = href === '#' || href.startsWith('#');
+            if (isInPage) {
+                e.preventDefault();
+                // Remove active class from all links
+                navLinks.forEach(l => l.classList.remove('active'));
+                // Add active class to clicked link
+                this.classList.add('active');
+                // Simulate navigation section update
+                const pageName = this.textContent.toLowerCase();
+                updatePageContent(pageName);
+            } else {
+                // Allow real navigation like dashboard.html
+                // Optional: mark active before navigation
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            }
         });
     });
     
@@ -79,6 +82,15 @@ document.addEventListener('DOMContentLoaded', function() {
             logout();
         }
     });
+
+    // Logo/title click redirects to home
+    const logoSection = document.querySelector('.logo-section');
+    if (logoSection) {
+        logoSection.style.cursor = 'pointer';
+        logoSection.addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    }
     
     // Add smooth scrolling for better UX
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -118,6 +130,40 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
     }
     
+    // --------- Site-wide time tracking (per user, per day) ---------
+    let trackingInterval = null;
+    function startTimeTracking() {
+        const userData = localStorage.getItem('MindEase_user');
+        if (!userData) return;
+        const user = JSON.parse(userData);
+        const key = `MindEase_time_${user.id}`;
+        if (trackingInterval) clearInterval(trackingInterval);
+        trackingInterval = setInterval(() => {
+            try {
+                const store = JSON.parse(localStorage.getItem(key) || '{}');
+                const now = new Date();
+                const y = now.getFullYear();
+                const m = String(now.getMonth() + 1).padStart(2, '0');
+                const d = String(now.getDate()).padStart(2, '0');
+                const dayKey = `${y}-${m}-${d}`;
+                store[dayKey] = (store[dayKey] || 0) + 5; // add 5 seconds per tick
+                localStorage.setItem(key, JSON.stringify(store));
+            } catch (_) {}
+        }, 5000);
+        window.addEventListener('beforeunload', function() { if (trackingInterval) clearInterval(trackingInterval); });
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                if (trackingInterval) clearInterval(trackingInterval);
+            } else {
+                startTimeTracking();
+            }
+        });
+    }
+
+    if (checkAuthentication()) {
+        startTimeTracking();
+    }
+
     function loadUserData() {
         if (checkAuthentication()) {
             const userData = localStorage.getItem('MindEase_user');
@@ -158,17 +204,26 @@ document.addEventListener('DOMContentLoaded', function() {
         const loginBtn = document.getElementById('loginBtn');
         const registerBtn = document.getElementById('registerBtn');
         const profilePic = document.getElementById('profilePic');
+        const dashboardNav = document.getElementById('dashboardNav');
+        const getStartedBtn = document.querySelector('.btn-cta');
+        const focusNav = document.getElementById('focusNav');
 
         if (currentUser) {
             // User is logged in - show profile pic
             if (loginBtn) loginBtn.style.display = 'none';
             if (registerBtn) registerBtn.style.display = 'none';
             if (profilePic) profilePic.style.display = 'flex';
+            if (dashboardNav) dashboardNav.style.display = 'inline-block';
+            if (focusNav) focusNav.style.display = 'inline-block';
+            if (getStartedBtn) getStartedBtn.style.display = 'none';
         } else {
             // User is not logged in - show login button
             if (loginBtn) loginBtn.style.display = 'block';
             if (registerBtn) registerBtn.style.display = 'block';
             if (profilePic) profilePic.style.display = 'none';
+            if (dashboardNav) dashboardNav.style.display = 'none';
+            if (focusNav) focusNav.style.display = 'none';
+            if (getStartedBtn) getStartedBtn.style.display = 'block';
         }
     }
     
@@ -229,13 +284,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Reset password functionality
+    // Reset password: navigate to auth reset modal
     const resetPasswordLink = document.getElementById('resetPasswordLink');
     function handleResetPassword(e) {
         e.preventDefault();
-        alert('Reset password functionality is not implemented yet. Please contact support.');
-        // Alternatively, redirect to auth page or open a modal
-        // window.location.href = 'auth.html';
+        window.location.href = 'auth.html?tab=login#reset';
     }
 
     // Add event listeners for auth buttons

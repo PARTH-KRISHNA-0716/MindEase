@@ -226,7 +226,7 @@ select.form-input {
     align-items: flex-start;
     cursor: pointer;
     font-size: 0.9rem;
-    color: #6b7280;
+    color: #374151;
     line-height: 1.4;
 }
 
@@ -237,7 +237,7 @@ select.form-input {
 .checkmark {
     width: 18px;
     height: 18px;
-    border: 2px solid #d1d5db;
+    border: 2px solid #374151;
     border-radius: 4px;
     margin-right: 0.5rem;
     position: relative;
@@ -432,7 +432,7 @@ select.form-input {
 /* Form Validation Styles */
 .form-input.error {
     border-color: #ef4444;
-    background: #374151;
+    background: #ffffff;
 }
 
 .form-input.error:-webkit-autofill {
@@ -443,7 +443,7 @@ select.form-input {
 
 .form-input.success {
     border-color: #10b981;
-    background: #374151;
+    background: #ffffff;
 }
 
 .form-input.error:-webkit-autofill {

@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const signupFormElement = document.getElementById('signupFormElement');
     const successModal = document.getElementById('successModal');
     const errorModal = document.getElementById('errorModal');
+    const resetModal = document.getElementById('resetModal');
     const errorMessage = document.getElementById('errorMessage');
     const successTitle = document.getElementById('successTitle');
     const successMessage = document.getElementById('successMessage');
@@ -97,6 +98,10 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (tabParam === 'login') {
             switchTab('login');
         }
+        if (window.location.hash.toLowerCase().includes('reset')) {
+            const link = document.querySelector('.resetPasswordLink');
+            if (link) link.click();
+        }
     } catch (_) {}
     
     // Password toggle functionality
@@ -159,6 +164,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     
+    // Forgot password flow
+    const forgotLink = document.querySelector('.resetPasswordLink');
+    const resetForm = document.getElementById('resetForm');
+    const resetCancelBtn = document.getElementById('resetCancelBtn');
+
+    if (forgotLink) {
+        forgotLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            openResetModal();
+        });
+    }
+
+    function openResetModal() { if (resetModal) resetModal.classList.add('show'); }
+    function closeResetModal() { if (resetModal) resetModal.classList.remove('show'); }
+
+    if (resetCancelBtn) resetCancelBtn.addEventListener('click', closeResetModal);
+
+    if (resetForm) {
+        resetForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fullName = document.getElementById('resetFullName').value.trim();
+            const emailOrPhone = document.getElementById('resetEmailOrPhone').value.trim();
+            const newPass = document.getElementById('resetPassword').value;
+            const verify = document.getElementById('resetVerifyPassword').value;
+
+            if (!fullName || !emailOrPhone || !newPass || !verify) {
+                showError('Please fill all fields.');
+                return;
+            }
+            if (newPass.length < 8) {
+                showError('Password must be at least 8 characters.');
+                return;
+            }
+            if (newPass !== verify) {
+                showError('Passwords do not match.');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('MindEase_users') || '[]');
+            const idx = users.findIndex(u => (u.email === emailOrPhone || u.mobile === emailOrPhone) && (u.name || '').toLowerCase() === fullName.toLowerCase());
+            if (idx === -1) {
+                showError('User not found. Check name and email/mobile.');
+                return;
+            }
+
+            users[idx].password = newPass;
+            localStorage.setItem('MindEase_users', JSON.stringify(users));
+            closeResetModal();
+            showSuccessModal('Password Reset', 'Your password has been updated. You can now sign in.');
+        });
+    }
+
     // Login form submission
     loginFormElement.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -347,7 +404,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Redirect after 2 seconds
         setTimeout(() => {
-            window.location.href = 'index.html';
+            window.location.href = 'dashboard.html';
         }, 2000);
     }
     
