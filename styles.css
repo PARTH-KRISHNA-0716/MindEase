@@ -10,6 +10,9 @@ body {
     background: #0f1115;
     color: #000000;
     line-height: 1.6;
+    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .page-shell {
@@ -19,6 +22,9 @@ body {
     border-radius: 14px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.35);
     overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Navbar Styles */
@@ -259,6 +265,7 @@ body {
     margin: auto auto;
     padding: 0 2rem;
     text-align: center;
+    flex: 1;
 }
 
 .main-content h1 { color: #0b1220; align-content: center; }
@@ -445,13 +452,34 @@ body.focus-mode .main-content p {
     }
     
     .headline { font-size: 2rem; }
-    .hero { grid-template-columns: 1fr; }
+    .hero { 
+        grid-template-columns: 1fr; 
+        padding: 1.5rem;
+        gap: 2rem;
+    }
+    .hero-content {
+        padding-left: 0;
+        text-align: center;
+    }
     .hero-visual { height: 220px; }
     .feature-grid { grid-template-columns: 1fr; }
     .testimonial-grid { grid-template-columns: 1fr; }
+    
+    /* Dashboard responsive */
+    .dashboard-main {
+        padding: 1rem;
+    }
+    
+    .main-content {
+        padding: 0 1rem;
+    }
 }
 
 @media (max-width: 480px) {
+    .navbar-container {
+        padding: 0.75rem;
+    }
+    
     .nav-links {
         gap: 1rem;
     }
@@ -464,5 +492,89 @@ body.focus-mode .main-content p {
         padding: 0.6rem 1.2rem;
         font-size: 0.9rem;
         min-width: 70px;
+    }
+    
+    .hero {
+        padding: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .headline {
+        font-size: 1.75rem;
+    }
+    
+    .banner-img {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+    }
+    
+    .dashboard-main {
+        padding: 0.75rem;
+    }
+    
+    .main-content {
+        padding: 0 0.75rem;
+    }
+    
+    .page-shell {
+        margin: 0.5rem;
+        border-radius: 8px;
+    }
+    
+    .logo-icon > img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .logo-text {
+        font-size: 1rem;
+    }
+    
+    .profile-pic {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .profile-popout {
+        min-width: 200px;
+        right: -10px;
+    }
+}
+
+/* Additional mobile optimizations */
+@media (max-width: 360px) {
+    .navbar-container {
+        padding: 0.5rem;
+    }
+    
+    .nav-links {
+        gap: 0.75rem;
+    }
+    
+    .nav-link {
+        font-size: 0.85rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        min-width: 60px;
+    }
+    
+    .hero {
+        padding: 0.75rem;
+    }
+    
+    .headline {
+        font-size: 1.5rem;
+    }
+    
+    .dashboard-main {
+        padding: 0.5rem;
+    }
+    
+    .main-content {
+        padding: 0 0.5rem;
     }
 }

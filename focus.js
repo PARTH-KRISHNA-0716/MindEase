@@ -40,23 +40,27 @@ document.addEventListener('DOMContentLoaded', function() {
         logoSection.addEventListener('click', function() { window.location.href = 'index.html'; });
     }
 
-    // Pomodoro timer
-    const modes = {
-        pomodoro: 25 * 60,
-        short: 5 * 60,
-        long: 15 * 60
-    };
-    let currentMode = 'pomodoro';
-    let remaining = modes[currentMode];
-    let total = modes[currentMode];
+    // Enhanced Pomodoro Timer
+    let studyTime = 25 * 60; // Default 25 minutes
+    let breakTime = 5 * 60;  // Default 5 minutes
+    let remaining = studyTime;
+    let total = studyTime;
     let timerId = null;
     let running = false;
+    let isStudyMode = true;
 
     const display = document.getElementById('timerDisplay');
-    const bar = document.getElementById('timerProgressBar');
-    const startPauseBtn = document.getElementById('startPauseBtn');
+    const modeDisplay = document.getElementById('timerMode');
+    const progressCircle = document.getElementById('progressCircle');
+    const playPauseBtn = document.getElementById('playPauseBtn');
     const resetBtn = document.getElementById('resetBtn');
-    const modeButtons = document.querySelectorAll('.timer-controls [data-mode]');
+    const playIcon = playPauseBtn.querySelector('.play-icon');
+    
+    // Timer settings elements
+    const studyTimeRadios = document.querySelectorAll('input[name="studyTime"]');
+    const breakTimeRadios = document.querySelectorAll('input[name="breakTime"]');
+    const customStudyInput = document.getElementById('customStudyTime');
+    const customBreakInput = document.getElementById('customBreakTime');
 
     function formatTime(sec) {
         const m = Math.floor(sec / 60).toString().padStart(2, '0');
@@ -64,12 +68,19 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${m}:${s}`;
     }
 
+    function updateProgressCircle() {
+        if (progressCircle) {
+            const circumference = 2 * Math.PI * 90; // radius = 90
+            const progress = (total - remaining) / total;
+            const offset = circumference - (progress * circumference);
+            progressCircle.style.strokeDashoffset = offset;
+        }
+    }
+
     function render() {
         if (display) display.textContent = formatTime(remaining);
-        if (bar) {
-            const pct = Math.max(0, Math.min(1, 1 - (remaining / total)));
-            bar.style.width = `${pct * 100}%`;
-        }
+        if (modeDisplay) modeDisplay.textContent = isStudyMode ? 'Study Time' : 'Break Time';
+        updateProgressCircle();
     }
 
     function tick() {
@@ -79,49 +90,129 @@ document.addEventListener('DOMContentLoaded', function() {
             remaining = 0;
             running = false;
             clearInterval(timerId);
-            startPauseBtn.textContent = 'Start';
+            updatePlayPauseButton();
+            
+            // Switch between study and break modes
+            if (isStudyMode) {
+                isStudyMode = false;
+                total = breakTime;
+                remaining = breakTime;
+                modeDisplay.textContent = 'Break Time';
+                // Change circle color for break
+                progressCircle.style.stroke = '#06B6D4';
+            } else {
+                isStudyMode = true;
+                total = studyTime;
+                remaining = studyTime;
+                modeDisplay.textContent = 'Study Time';
+                // Change circle color for study
+                progressCircle.style.stroke = '#10B981';
+            }
         }
         render();
     }
 
-    function setMode(mode) {
-        currentMode = mode;
-        total = modes[mode];
-        remaining = total;
-        running = false;
-        clearInterval(timerId);
-        startPauseBtn.textContent = 'Start';
-        render();
+    function updatePlayPauseButton() {
+        if (running) {
+            playIcon.innerHTML = '<path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>'; // Pause icon
+        } else {
+            playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'; // Play icon
+        }
     }
 
-    if (modeButtons) modeButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const mode = this.getAttribute('data-mode');
-            setMode(mode);
-        });
-    });
-
-    if (startPauseBtn) startPauseBtn.addEventListener('click', function() {
+    function startPause() {
         if (running) {
             running = false;
             clearInterval(timerId);
-            startPauseBtn.textContent = 'Start';
         } else {
             running = true;
-            startPauseBtn.textContent = 'Pause';
             timerId = setInterval(tick, 1000);
         }
-    });
+        updatePlayPauseButton();
+    }
 
-    if (resetBtn) resetBtn.addEventListener('click', function() {
+    function reset() {
         running = false;
         clearInterval(timerId);
         remaining = total;
-        startPauseBtn.textContent = 'Start';
+        updatePlayPauseButton();
         render();
+    }
+
+    function updateStudyTime() {
+        const selectedStudy = document.querySelector('input[name="studyTime"]:checked');
+        if (selectedStudy) {
+            if (selectedStudy.value === 'custom') {
+                const customValue = parseInt(customStudyInput.value);
+                if (customValue && customValue > 0 && customValue <= 120) {
+                    studyTime = customValue * 60;
+                }
+            } else {
+                studyTime = parseInt(selectedStudy.value) * 60;
+            }
+            
+            if (isStudyMode) {
+                total = studyTime;
+                remaining = studyTime;
+                reset();
+            }
+        }
+    }
+
+    function updateBreakTime() {
+        const selectedBreak = document.querySelector('input[name="breakTime"]:checked');
+        if (selectedBreak) {
+            if (selectedBreak.value === 'custom') {
+                const customValue = parseInt(customBreakInput.value);
+                if (customValue && customValue > 0 && customValue <= 60) {
+                    breakTime = customValue * 60;
+                }
+            } else {
+                breakTime = parseInt(selectedBreak.value) * 60;
+            }
+            
+            if (!isStudyMode) {
+                total = breakTime;
+                remaining = breakTime;
+                reset();
+            }
+        }
+    }
+
+    // Event listeners for timer settings
+    studyTimeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                customStudyInput.style.display = 'block';
+            } else {
+                customStudyInput.style.display = 'none';
+                updateStudyTime();
+            }
+        });
     });
 
+    breakTimeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                customBreakInput.style.display = 'block';
+            } else {
+                customBreakInput.style.display = 'none';
+                updateBreakTime();
+            }
+        });
+    });
+
+    customStudyInput.addEventListener('input', updateStudyTime);
+    customBreakInput.addEventListener('input', updateBreakTime);
+
+    // Event listeners for control buttons
+    if (playPauseBtn) playPauseBtn.addEventListener('click', startPause);
+    if (resetBtn) resetBtn.addEventListener('click', reset);
+
+    // Initialize
+    updatePlayPauseButton();
     render();
 });
+
 
 
