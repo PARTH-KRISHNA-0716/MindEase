@@ -284,96 +284,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Sync every second
     setInterval(syncWithBackgroundTimer, 1000);
 
-    // Timer alert functionality
-    let alarmAudio = null;
-    let alertInterval = null;
-
+    // Timer alert functionality - audio system removed
     function showTimerAlert() {
         const modeText = isStudyMode ? 'Study' : 'Break';
         const message = `${modeText} time completed! Time for a ${isStudyMode ? 'break' : 'study'} session.`;
         
-        // Play alarm sound
-        playAlarmSound();
-        
-        // Show alert with stop button
-        const userResponse = confirm(`${message}\n\nClick OK to stop the alarm and continue.`);
-        
-        if (userResponse) {
-            stopAlarmSound();
-        }
-    }
-
-    function playAlarmSound() {
-        try {
-            // Create audio element if it doesn't exist
-            if (!alarmAudio) {
-                alarmAudio = new Audio('alarm.mp3');
-                alarmAudio.loop = true; 
-                alarmAudio.volume = 1.0;
-            }
-            
-            // Play the alarm sound
-            alarmAudio.play().catch(error => {
-                console.log('Could not play alarm sound:', error);
-                // Fallback: use browser's built-in beep if audio file fails
-                playFallbackBeep();
-            });
-        } catch (error) {
-            console.log('Error playing alarm sound:', error);
-            playFallbackBeep();
-        }
-    }
-
-    function stopAlarmSound() {
-        if (alarmAudio) {
-            alarmAudio.pause();
-            alarmAudio.currentTime = 0; // Reset to beginning
-        }
-        if (alertInterval) {
-            clearInterval(alertInterval);
-            alertInterval = null;
-        }
-    }
-
-    function playFallbackBeep() {
-        // Fallback beep sound using Web Audio API
-        try {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-            oscillator.type = 'square';
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
-            
-            // Repeat the beep every 2 seconds
-            alertInterval = setInterval(() => {
-                const newOscillator = audioContext.createOscillator();
-                const newGainNode = audioContext.createGain();
-                
-                newOscillator.connect(newGainNode);
-                newGainNode.connect(audioContext.destination);
-                
-                newOscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-                newOscillator.type = 'square';
-                
-                newGainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                newGainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-                
-                newOscillator.start(audioContext.currentTime);
-                newOscillator.stop(audioContext.currentTime + 0.5);
-            }, 2000);
-        } catch (error) {
-            console.log('Fallback beep also failed:', error);
-        }
+        // Show alert message only
+        alert(message);
     }
 
     // Initialize

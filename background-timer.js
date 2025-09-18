@@ -37,14 +37,8 @@ class BackgroundTimer {
             this.saveTimerState();
         });
         
-        // Handle page visibility changes
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                this.pauseTimer();
-            } else {
-                this.resumeTimer();
-            }
-        });
+        // Note: Removed visibility change handler to allow timer to continue running
+        // when navigating between pages. Timer will only pause when browser tab is closed.
     }
 
     loadTimerState() {
@@ -199,84 +193,11 @@ class BackgroundTimer {
         const modeText = this.isStudyMode ? 'Study' : 'Break';
         const message = `${modeText} time completed! Time for a ${this.isStudyMode ? 'break' : 'study'} session.`;
         
-        // Play alarm sound
-        this.playAlarmSound();
-        
         // Show alert
-        const userResponse = confirm(`${message}\n\nClick OK to stop the alarm and continue.`);
-        
-        if (userResponse) {
-            this.stopAlarmSound();
-        }
+        alert(message);
     }
 
-    playAlarmSound() {
-        try {
-            if (!this.alarmAudio) {
-                this.alarmAudio = new Audio('alarm.mp3');
-                this.alarmAudio.loop = true;
-                this.alarmAudio.volume = 0.7;
-            }
-            
-            this.alarmAudio.play().catch(error => {
-                console.log('Could not play alarm sound:', error);
-                this.playFallbackBeep();
-            });
-        } catch (error) {
-            console.log('Error playing alarm sound:', error);
-            this.playFallbackBeep();
-        }
-    }
-
-    stopAlarmSound() {
-        if (this.alarmAudio) {
-            this.alarmAudio.pause();
-            this.alarmAudio.currentTime = 0;
-        }
-        if (this.alertInterval) {
-            clearInterval(this.alertInterval);
-            this.alertInterval = null;
-        }
-    }
-
-    playFallbackBeep() {
-        try {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-            oscillator.type = 'square';
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
-            
-            this.alertInterval = setInterval(() => {
-                const newOscillator = audioContext.createOscillator();
-                const newGainNode = audioContext.createGain();
-                
-                newOscillator.connect(newGainNode);
-                newGainNode.connect(audioContext.destination);
-                
-                newOscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-                newOscillator.type = 'square';
-                
-                newGainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                newGainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-                
-                newOscillator.start(audioContext.currentTime);
-                newOscillator.stop(audioContext.currentTime + 0.5);
-            }, 2000);
-        } catch (error) {
-            console.log('Fallback beep also failed:', error);
-        }
-    }
+    // Audio system removed - only showing alert message
 
     updateNavbarIndicator() {
         // Update navbar timer indicator
